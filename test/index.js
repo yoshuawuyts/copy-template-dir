@@ -27,7 +27,6 @@ test('should write a bunch of files', function (t) {
       t.ok(Array.isArray(arr), 'is array')
 
       const names = arr.map(function (file) { return file.path })
-      console.log(names)
       t.notEqual(names.indexOf('1.txt'), -1, '1.txt exists')
       t.notEqual(names.indexOf('2.txt'), -1, '2.txt exists')
       t.notEqual(names.indexOf('3.txt'), -1, '3.txt exists')

@@ -56,7 +56,6 @@ function writeFile (outDir, vars, file) {
 
     mkdirp(path.join(outDir, parentDir), function (err) {
       if (err) return done(err)
-      console.log('outfile', outFile)
 
       const rs = fs.createReadStream(inFile)
       const ts = minstache(vars)
