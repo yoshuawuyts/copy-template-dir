@@ -16,7 +16,7 @@ test('should assert input values', function (t) {
 })
 
 test('should write a bunch of files', function (t) {
-  t.plan(6)
+  t.plan(7)
 
   const inDir = path.join(__dirname, 'fixtures')
   const outDir = path.join(__dirname, '../tmp')
@@ -26,10 +26,12 @@ test('should write a bunch of files', function (t) {
     readdirp({ root: outDir }).pipe(concat({ object: true }, function (arr) {
       t.ok(Array.isArray(arr), 'is array')
 
-      const names = arr.map(function (file) { return file.name })
-      t.notEqual(names.indexOf('1.txt'), '-1')
-      t.notEqual(names.indexOf('2.txt'), '-1')
-      t.notEqual(names.indexOf('3.txt'), '-1')
+      const names = arr.map(function (file) { return file.path })
+      console.log(names)
+      t.notEqual(names.indexOf('1.txt'), -1, '1.txt exists')
+      t.notEqual(names.indexOf('2.txt'), -1, '2.txt exists')
+      t.notEqual(names.indexOf('3.txt'), -1, '3.txt exists')
+      t.notEqual(names.indexOf('foo/4.txt'), -1, 'foo/4.txt exists')
 
       rimraf(outDir, function (err) {
         t.error(err)

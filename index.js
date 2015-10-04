@@ -49,15 +49,21 @@ function copyTemplateDir (srcDir, outDir, vars, cb) {
 // str -> stream
 function writeFile (outDir, vars, file) {
   return function (done) {
-    const fileName = file.name
+    const fileName = file.path
     const inFile = file.fullPath
+    const parentDir = file.parentDir
     const outFile = path.join(outDir, reDot(fileName))
 
-    const rs = fs.createReadStream(inFile)
-    const ts = minstache(vars)
-    const ws = fs.createWriteStream(outFile)
+    mkdirp(path.join(outDir, parentDir), function (err) {
+      if (err) return done(err)
+      console.log('outfile', outFile)
 
-    return pump(rs, ts, ws, done)
+      const rs = fs.createReadStream(inFile)
+      const ts = minstache(vars)
+      const ws = fs.createWriteStream(outFile)
+
+      pump(rs, ts, ws, done)
+    })
   }
 }
 
