@@ -19,7 +19,7 @@
   "license": "MIT",
   "dependencies": {
     "end-of-stream": "^1.1.0",
-    "minstache-stream": "^1.0.0",
+    "maxstache-stream": "^1.0.0",
     "mkdirp": "^0.5.1",
     "noop2": "^2.0.0",
     "pump": "^1.0.0",

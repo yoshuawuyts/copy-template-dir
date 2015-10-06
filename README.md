@@ -40,7 +40,7 @@ with variables. Takes the following arguments:
 - __cb(err)__: A callback that is called on completion.
 
 ## See Also
-- [minstache-stream](https://github.com/yoshuawuyts/minstache-stream)
+- [maxstache-stream](https://github.com/yoshuawuyts/maxstache-stream)
 
 ## License
 [MIT](https://tldrlegal.com/license/mit-license)

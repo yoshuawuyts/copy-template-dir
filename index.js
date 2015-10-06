@@ -1,4 +1,4 @@
-const minstache = require('minstache-stream')
+const maxstache = require('maxstache-stream')
 const parallel = require('run-parallel')
 const eos = require('end-of-stream')
 const readdirp = require('readdirp')
@@ -58,7 +58,7 @@ function writeFile (outDir, vars, file) {
       if (err) return done(err)
 
       const rs = fs.createReadStream(inFile)
-      const ts = minstache(vars)
+      const ts = maxstache(vars)
       const ws = fs.createWriteStream(outFile)
 
       pump(rs, ts, ws, done)
