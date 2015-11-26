@@ -68,6 +68,8 @@ function writeFile (outDir, vars, file) {
 
 // replace leading underscores with dots
 // str -> str
-function reDot (filename) {
-  return filename.replace(/^\_./, '.')
+function reDot (filepath) {
+  const parts = filepath.split(path.sep)
+  const filename = parts.pop().replace(/^\_./, '.')
+  return parts.concat([filename]).join(path.sep)
 }
