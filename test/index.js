@@ -16,7 +16,7 @@ test('should assert input values', function (t) {
 })
 
 test('should write a bunch of files', function (t) {
-  t.plan(7)
+  t.plan(9)
 
   const inDir = path.join(__dirname, 'fixtures')
   const outDir = path.join(__dirname, '../tmp')
@@ -27,10 +27,12 @@ test('should write a bunch of files', function (t) {
       t.ok(Array.isArray(arr), 'is array')
 
       const names = arr.map(function (file) { return file.path })
+      t.notEqual(names.indexOf('.a'), -1, '.a exists')
       t.notEqual(names.indexOf('1.txt'), -1, '1.txt exists')
       t.notEqual(names.indexOf('2.txt'), -1, '2.txt exists')
       t.notEqual(names.indexOf('3.txt'), -1, '3.txt exists')
-      t.notEqual(names.indexOf('foo/4.txt'), -1, 'foo/4.txt exists')
+      t.notEqual(names.indexOf('foo' + path.sep + '.b'), -1, 'foo/.b exists')
+      t.notEqual(names.indexOf('foo' + path.sep + '4.txt'), -1, 'foo/4.txt exists')
 
       rimraf(outDir, function (err) {
         t.error(err)
@@ -50,7 +52,7 @@ test('should inject context variables strings', function (t) {
     readdirp({ root: outDir }).pipe(concat({ object: true }, function (arr) {
       t.ok(Array.isArray(arr), 'is array')
 
-      const file = arr[0].fullPath
+      const file = path.join(outDir, '1.txt')
       fs.readFile(file, function (err, chunk) {
         t.error(err)
 
