@@ -1,6 +1,6 @@
 {
   "name": "copy-template-dir",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "High throughput template dir writes",
   "main": "index.js",
   "scripts": {
