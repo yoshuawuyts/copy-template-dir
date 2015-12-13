@@ -32,9 +32,9 @@ copy(inDir, outDir, vars, (err) => {
 ### copyTemplateDir(templateDir, targetDir, vars, cb)
 Copy a directory of files over to the target directory, and inject the files
 with variables. Takes the following arguments:
-- __templateDir__: The directory that holds the templates. Dotfiles need to be
-  prepended with a `_`.  Files are populated with variables using the
-  `{{varName}}` syntax.
+- __templateDir__: The directory that holds the templates. Filenames prepended
+  with a `_` will have it removed when copying. Dotfiles need to be prepended
+  with a `_`. Files are populated with variables using the `{{varName}}` syntax.
 - __targetDir__: the output directory
 - __vars__: An object with variables that are injected into the template files.
 - __cb(err)__: A callback that is called on completion.
