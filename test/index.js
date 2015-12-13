@@ -16,7 +16,7 @@ test('should assert input values', function (t) {
 })
 
 test('should write a bunch of files', function (t) {
-  t.plan(9)
+  t.plan(11)
 
   const inDir = path.join(__dirname, 'fixtures')
   const outDir = path.join(__dirname, '../tmp')
@@ -28,10 +28,12 @@ test('should write a bunch of files', function (t) {
 
       const names = arr.map(function (file) { return file.path })
       t.notEqual(names.indexOf('.a'), -1, '.a exists')
+      t.notEqual(names.indexOf('c'), -1, 'c exists')
       t.notEqual(names.indexOf('1.txt'), -1, '1.txt exists')
       t.notEqual(names.indexOf('2.txt'), -1, '2.txt exists')
       t.notEqual(names.indexOf('3.txt'), -1, '3.txt exists')
       t.notEqual(names.indexOf('foo' + path.sep + '.b'), -1, 'foo/.b exists')
+      t.notEqual(names.indexOf('foo' + path.sep + 'd'), -1, 'foo/d exists')
       t.notEqual(names.indexOf('foo' + path.sep + '4.txt'), -1, 'foo/4.txt exists')
 
       rimraf(outDir, function (err) {

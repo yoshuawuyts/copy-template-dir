@@ -52,7 +52,7 @@ function writeFile (outDir, vars, file) {
     const fileName = file.path
     const inFile = file.fullPath
     const parentDir = file.parentDir
-    const outFile = path.join(outDir, reDot(fileName))
+    const outFile = path.join(outDir, removeUnderscore(fileName))
 
     mkdirp(path.join(outDir, parentDir), function (err) {
       if (err) return done(err)
@@ -66,10 +66,10 @@ function writeFile (outDir, vars, file) {
   }
 }
 
-// replace leading underscores with dots
+// remove a leading underscore
 // str -> str
-function reDot (filepath) {
+function removeUnderscore (filepath) {
   const parts = filepath.split(path.sep)
-  const filename = parts.pop().replace(/^\_./, '.')
+  const filename = parts.pop().replace(/^_/, '')
   return parts.concat([filename]).join(path.sep)
 }
