@@ -31,16 +31,21 @@ function copyTemplateDir (srcDir, outDir, vars, cb) {
 
     const rs = readdirp({ root: srcDir })
     const streams = []
+    const createdFiles = []
 
     // create a new stream for every file emitted
     rs.on('data', function (file) {
+      createdFiles.push(path.join(outDir, removeUnderscore(file.path)))
       streams.push(writeFile(outDir, vars, file))
     })
 
     // delegate errors & close streams
     eos(rs, function (err) {
       if (err) return cb(err)
-      parallel(streams, cb)
+      parallel(streams, function (err) {
+        if (err) return cb(err)
+        cb(null, createdFiles)
+      })
     })
   })
 }

@@ -22,8 +22,9 @@ const vars = { foo: 'bar' }
 const inDir = path.join(process.cwd(), 'templates')
 const outDir = path.join(process.cwd(), 'dist')
 
-copy(inDir, outDir, vars, (err) => {
+copy(inDir, outDir, vars, (err, createdFiles) => {
   if (err) throw err
+  createdFiles.forEach(filePath => console.log(`Created ${filePath}`))
   console.log('done!')
 })
 ```
@@ -37,7 +38,8 @@ with variables. Takes the following arguments:
   with a `_`. Files are populated with variables using the `{{varName}}` syntax.
 - __targetDir__: the output directory
 - __vars__: An object with variables that are injected into the template files.
-- __cb(err)__: A callback that is called on completion.
+- __cb(err, createdFiles)__: A callback that is called on completion, with
+paths to created files if there were no errors.
 
 ## See Also
 - [maxstache-stream](https://github.com/yoshuawuyts/maxstache-stream)

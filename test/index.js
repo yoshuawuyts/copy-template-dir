@@ -16,25 +16,34 @@ test('should assert input values', function (t) {
 })
 
 test('should write a bunch of files', function (t) {
-  t.plan(11)
+  t.plan(21)
+
+  function checkCreatedFileNames (names, check) {
+    t.notEqual(names.indexOf('.a'), -1, '.a ' + check)
+    t.notEqual(names.indexOf('c'), -1, 'c ' + check)
+    t.notEqual(names.indexOf('1.txt'), -1, '1.txt ' + check)
+    t.notEqual(names.indexOf('2.txt'), -1, '2.txt ' + check)
+    t.notEqual(names.indexOf('3.txt'), -1, '3.txt ' + check)
+    t.notEqual(names.indexOf('foo' + path.sep + '.b'), -1, 'foo/.b ' + check)
+    t.notEqual(names.indexOf('foo' + path.sep + 'd'), -1, 'foo/d ' + check)
+    t.notEqual(names.indexOf('foo' + path.sep + '4.txt'), -1, 'foo/4.txt ' + check)
+  }
 
   const inDir = path.join(__dirname, 'fixtures')
   const outDir = path.join(__dirname, '../tmp')
-  copy(inDir, outDir, function (err) {
+  copy(inDir, outDir, function (err, createdFiles) {
     t.error(err)
+    t.ok(Array.isArray(createdFiles), 'createdFiles is an array')
+    t.equal(createdFiles.length, 8)
+    checkCreatedFileNames(createdFiles.map(function (filePath) {
+      return path.relative(outDir, filePath)
+    }), 'reported as created')
 
     readdirp({ root: outDir }).pipe(concat({ object: true }, function (arr) {
       t.ok(Array.isArray(arr), 'is array')
 
       const names = arr.map(function (file) { return file.path })
-      t.notEqual(names.indexOf('.a'), -1, '.a exists')
-      t.notEqual(names.indexOf('c'), -1, 'c exists')
-      t.notEqual(names.indexOf('1.txt'), -1, '1.txt exists')
-      t.notEqual(names.indexOf('2.txt'), -1, '2.txt exists')
-      t.notEqual(names.indexOf('3.txt'), -1, '3.txt exists')
-      t.notEqual(names.indexOf('foo' + path.sep + '.b'), -1, 'foo/.b exists')
-      t.notEqual(names.indexOf('foo' + path.sep + 'd'), -1, 'foo/d exists')
-      t.notEqual(names.indexOf('foo' + path.sep + '4.txt'), -1, 'foo/4.txt exists')
+      checkCreatedFileNames(names, 'exists')
 
       rimraf(outDir, function (err) {
         t.error(err)
