@@ -19,6 +19,7 @@
   "license": "MIT",
   "dependencies": {
     "end-of-stream": "^1.1.0",
+    "graceful-fs": "^4.1.3",
     "maxstache-stream": "^1.0.0",
     "mkdirp": "^0.5.1",
     "noop2": "^2.0.0",

@@ -7,7 +7,7 @@ const mkdirp = require('mkdirp')
 const noop = require('noop2')
 const path = require('path')
 const pump = require('pump')
-const fs = require('fs')
+const fs = require('graceful-fs')
 
 module.exports = copyTemplateDir
 
