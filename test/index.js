@@ -16,7 +16,7 @@ test('should assert input values', function (t) {
 })
 
 test('should write a bunch of files', function (t) {
-  t.plan(21)
+  t.plan(23)
 
   function checkCreatedFileNames (names, check) {
     t.notEqual(names.indexOf('.a'), -1, '.a ' + check)
@@ -24,6 +24,7 @@ test('should write a bunch of files', function (t) {
     t.notEqual(names.indexOf('1.txt'), -1, '1.txt ' + check)
     t.notEqual(names.indexOf('2.txt'), -1, '2.txt ' + check)
     t.notEqual(names.indexOf('3.txt'), -1, '3.txt ' + check)
+    t.notEqual(names.indexOf('.txt'), -1, '.txt ' + check)
     t.notEqual(names.indexOf('foo' + path.sep + '.b'), -1, 'foo/.b ' + check)
     t.notEqual(names.indexOf('foo' + path.sep + 'd'), -1, 'foo/d ' + check)
     t.notEqual(names.indexOf('foo' + path.sep + '4.txt'), -1, 'foo/4.txt ' + check)
@@ -34,7 +35,7 @@ test('should write a bunch of files', function (t) {
   copy(inDir, outDir, function (err, createdFiles) {
     t.error(err)
     t.ok(Array.isArray(createdFiles), 'createdFiles is an array')
-    t.equal(createdFiles.length, 8)
+    t.equal(createdFiles.length, 9)
     checkCreatedFileNames(createdFiles.map(function (filePath) {
       return path.relative(outDir, filePath)
     }), 'reported as created')
@@ -69,6 +70,29 @@ test('should inject context variables strings', function (t) {
 
         const file = String(chunk).trim()
         t.equal(file, 'hello bar sama')
+
+        rimraf(outDir, function (err) {
+          t.error(err)
+        })
+      })
+    }))
+  })
+})
+
+test('should inject context variables strings into filenames', function (t) {
+  t.plan(4)
+
+  const inDir = path.join(__dirname, 'fixtures')
+  const outDir = path.join(__dirname, '../tmp')
+  copy(inDir, outDir, { foo: 'bar' }, function (err) {
+    t.error(err)
+
+    readdirp({ root: outDir }).pipe(concat({ object: true }, function (arr) {
+      t.ok(Array.isArray(arr), 'is array')
+
+      const file = path.join(outDir, 'bar.txt')
+      fs.access(file, function (err, chunk) {
+        t.error(err, 'bar.txt exists')
 
         rimraf(outDir, function (err) {
           t.error(err)
