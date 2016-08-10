@@ -1,4 +1,5 @@
-const maxstache = require('maxstache-stream')
+const maxstacheStream = require('maxstache-stream')
+const maxstache = require('maxstache')
 const parallel = require('run-parallel')
 const eos = require('end-of-stream')
 const readdirp = require('readdirp')
@@ -35,7 +36,7 @@ function copyTemplateDir (srcDir, outDir, vars, cb) {
 
     // create a new stream for every file emitted
     rs.on('data', function (file) {
-      createdFiles.push(path.join(outDir, removeUnderscore(file.path)))
+      createdFiles.push(path.join(outDir, maxstache(removeUnderscore(file.path), vars)))
       streams.push(writeFile(outDir, vars, file))
     })
 
@@ -57,13 +58,13 @@ function writeFile (outDir, vars, file) {
     const fileName = file.path
     const inFile = file.fullPath
     const parentDir = file.parentDir
-    const outFile = path.join(outDir, removeUnderscore(fileName))
+    const outFile = path.join(outDir, maxstache(removeUnderscore(fileName), vars))
 
     mkdirp(path.join(outDir, parentDir), function (err) {
       if (err) return done(err)
 
       const rs = fs.createReadStream(inFile)
-      const ts = maxstache(vars)
+      const ts = maxstacheStream(vars)
       const ws = fs.createWriteStream(outFile)
 
       pump(rs, ts, ws, done)
