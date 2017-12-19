@@ -12,6 +12,8 @@ const fs = require('graceful-fs')
 
 module.exports = copyTemplateDir
 
+copyTemplateDir.blacklist = ['hbs', 'mustache', 'njk', 'twig']
+
 // High throughput template dir writes
 // (str, str, obj, fn) -> null
 function copyTemplateDir (srcDir, outDir, vars, cb) {
@@ -67,9 +69,18 @@ function writeFile (outDir, vars, file) {
       const ts = maxstacheStream(vars)
       const ws = fs.createWriteStream(outFile)
 
-      pump(rs, ts, ws, done)
+      if (isBlacklisted(file)) {
+        pump(rs, ws, done)
+      } else {
+        pump(rs, ts, ws, done)
+      }
     })
   }
+}
+
+function isBlacklisted (file) {
+  const ext = file.path.split('.').pop()
+  return copyTemplateDir.blacklist.indexOf(ext) !== -1
 }
 
 // remove a leading underscore

@@ -16,7 +16,7 @@ test('should assert input values', function (t) {
 })
 
 test('should write a bunch of files', function (t) {
-  t.plan(23)
+  t.plan(25)
 
   function checkCreatedFileNames (names, check) {
     t.notEqual(names.indexOf('.a'), -1, '.a ' + check)
@@ -28,6 +28,7 @@ test('should write a bunch of files', function (t) {
     t.notEqual(names.indexOf('foo' + path.sep + '.b'), -1, 'foo/.b ' + check)
     t.notEqual(names.indexOf('foo' + path.sep + 'd'), -1, 'foo/d ' + check)
     t.notEqual(names.indexOf('foo' + path.sep + '4.txt'), -1, 'foo/4.txt ' + check)
+    t.notEqual(names.indexOf('templates' + path.sep + 'template.twig'), -1, 'templates/template.twig ' + check)
   }
 
   const inDir = path.join(__dirname, 'fixtures')
@@ -35,7 +36,7 @@ test('should write a bunch of files', function (t) {
   copy(inDir, outDir, function (err, createdFiles) {
     t.error(err)
     t.ok(Array.isArray(createdFiles), 'createdFiles is an array')
-    t.equal(createdFiles.length, 9)
+    t.equal(createdFiles.length, 11)
     checkCreatedFileNames(createdFiles.map(function (filePath) {
       return path.relative(outDir, filePath)
     }), 'reported as created')
@@ -80,7 +81,7 @@ test('should inject context variables strings', function (t) {
 })
 
 test('should inject context variables strings into filenames', function (t) {
-  t.plan(4)
+  t.plan(5)
 
   const inDir = path.join(__dirname, 'fixtures')
   const outDir = path.join(__dirname, '../tmp')
@@ -93,6 +94,36 @@ test('should inject context variables strings into filenames', function (t) {
       const file = path.join(outDir, 'bar.txt')
       fs.access(file, function (err, chunk) {
         t.error(err, 'bar.txt exists')
+
+        const file = path.join(outDir, 'templates' + path.sep + 'bar.hbs')
+        fs.access(file, function (err, chunk) {
+          t.error(err, 'bar.hbs exists')
+
+          rimraf(outDir, function (err) {
+            t.error(err)
+          })
+        })
+      })
+    }))
+  })
+})
+
+test('should ignore templates', function (t) {
+  t.plan(5)
+
+  const inDir = path.join(__dirname, 'fixtures')
+  const outDir = path.join(__dirname, '../tmp')
+  copy(inDir, outDir, { foo: 'bar' }, function (err) {
+    t.error(err)
+
+    readdirp({ root: outDir }).pipe(concat({ object: true }, function (arr) {
+      t.ok(Array.isArray(arr), 'is array')
+      const file = path.join(outDir, 'templates/bar.hbs')
+      fs.readFile(file, function (err, chunk) {
+        t.error(err)
+
+        const file = String(chunk).trim()
+        t.equal(file, 'This should tag should remain {{ hello }}')
 
         rimraf(outDir, function (err) {
           t.error(err)
