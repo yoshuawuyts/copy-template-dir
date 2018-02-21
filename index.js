@@ -60,7 +60,7 @@ function writeFile (outDir, vars, file) {
     const parentDir = file.parentDir
     const outFile = path.join(outDir, maxstache(removeUnderscore(fileName), vars))
 
-    mkdirp(path.join(outDir, parentDir), function (err) {
+    mkdirp(path.join(outDir, maxstache(parentDir)), function (err) {
       if (err) return done(err)
 
       const rs = fs.createReadStream(inFile)
