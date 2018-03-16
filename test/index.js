@@ -35,7 +35,7 @@ test('should write a bunch of files', function (t) {
   copy(inDir, outDir, function (err, createdFiles) {
     t.error(err)
     t.ok(Array.isArray(createdFiles), 'createdFiles is an array')
-    t.equal(createdFiles.length, 9)
+    t.equal(createdFiles.length, 10)
     checkCreatedFileNames(createdFiles.map(function (filePath) {
       return path.relative(outDir, filePath)
     }), 'reported as created')
@@ -93,6 +93,29 @@ test('should inject context variables strings into filenames', function (t) {
       const file = path.join(outDir, 'bar.txt')
       fs.access(file, function (err, chunk) {
         t.error(err, 'bar.txt exists')
+
+        rimraf(outDir, function (err) {
+          t.error(err)
+        })
+      })
+    }))
+  })
+})
+
+test('should inject context variables strings into directory names', function (t) {
+  t.plan(4)
+
+  const inDir = path.join(__dirname, 'fixtures')
+  const outDir = path.join(__dirname, '../tmp')
+  copy(inDir, outDir, { foo: 'bar' }, function (err) {
+    t.error(err)
+
+    readdirp({ root: outDir }).pipe(concat({ object: true }, function (arr) {
+      t.ok(Array.isArray(arr), 'is array')
+
+      const dir = path.join(outDir, 'bar')
+      fs.access(dir, function (err, chunk) {
+        t.error(err, 'bar directory exists')
 
         rimraf(outDir, function (err) {
           t.error(err)
