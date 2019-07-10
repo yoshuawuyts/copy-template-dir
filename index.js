@@ -36,7 +36,7 @@ function copyTemplateDir (srcDir, outDir, vars, cb) {
 
     // create a new stream for every file emitted
     rs.on('data', function (file) {
-      const dotfile = new RegExp(/^[.].*$/).test(file)
+      const dotfile = new RegExp(/^[.].*$/).test(file.name)
       if (dotfile) {
         createdFiles.push(path.join(outDir, file.path, vars))
         streams.push(writeDotfile(outDir, vars, file))
