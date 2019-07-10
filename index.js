@@ -38,7 +38,7 @@ function copyTemplateDir (srcDir, outDir, vars, cb) {
     rs.on('data', function (file) {
       const dotfile = new RegExp(/^[.].*$/).test(file.name)
       if (dotfile) {
-        createdFiles.push(path.join(outDir, file.path, vars))
+        createdFiles.push(path.join(outDir, file.path))
         streams.push(writeDotfile(outDir, vars, file))
       } else {
         createdFiles.push(path.join(outDir, maxstache(removeUnderscore(file.path), vars)))
@@ -86,7 +86,7 @@ function writeDotfile (outDir, vars, file) {
     const fileName = file.path
     const inFile = file.fullPath
     const parentDir = file.parentDir
-    const outFile = path.join(outDir, fileName, vars)
+    const outFile = path.join(outDir, fileName)
 
     mkdirp(path.join(outDir, parentDir), function (err) {
       if (err) return done(err)
