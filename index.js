@@ -36,8 +36,14 @@ function copyTemplateDir (srcDir, outDir, vars, cb) {
 
     // create a new stream for every file emitted
     rs.on('data', function (file) {
-      createdFiles.push(path.join(outDir, maxstache(removeUnderscore(file.path), vars)))
-      streams.push(writeFile(outDir, vars, file))
+      const dotfile = new RegExp(/^[.].*$/).test(file)
+      if (dotfile) {
+        createdFiles.push(path.join(outDir, file.path, vars))
+        streams.push(writeDotfile(outDir, vars, file))
+      } else {
+        createdFiles.push(path.join(outDir, maxstache(removeUnderscore(file.path), vars)))
+        streams.push(writeFile(outDir, vars, file))
+      }
     })
 
     // delegate errors & close streams
@@ -58,6 +64,7 @@ function writeFile (outDir, vars, file) {
     const fileName = file.path
     const inFile = file.fullPath
     const parentDir = file.parentDir
+
     const outFile = path.join(outDir, maxstache(removeUnderscore(fileName), vars))
 
     mkdirp(path.join(outDir, maxstache(parentDir, vars)), function (err) {
@@ -68,6 +75,26 @@ function writeFile (outDir, vars, file) {
       const ws = fs.createWriteStream(outFile)
 
       pump(rs, ts, ws, done)
+    })
+  }
+}
+
+// write a dotfile directly to a directory (no template)
+// str -> stream
+function writeDotfile (outDir, vars, file) {
+  return function (done) {
+    const fileName = file.path
+    const inFile = file.fullPath
+    const parentDir = file.parentDir
+    const outFile = path.join(outDir, fileName, vars)
+
+    mkdirp(path.join(outDir, parentDir), function (err) {
+      if (err) return done(err)
+
+      const rs = fs.createReadStream(inFile)
+      const ws = fs.createWriteStream(outFile)
+
+      pump(rs, ws, done)
     })
   }
 }
