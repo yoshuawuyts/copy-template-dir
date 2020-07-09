@@ -16,7 +16,7 @@ $ npm install copy-template-dir
 ## Usage
 ```js
 const copy = require('copy-template-dir')
-const path = require('path.join')
+const path = require('path')
 
 const vars = { foo: 'bar' }
 const inDir = path.join(process.cwd(), 'templates')
