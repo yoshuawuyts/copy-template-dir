@@ -3,6 +3,7 @@
   "version": "1.4.0",
   "description": "High throughput template dir writes",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "deps": "dependency-check . && dependency-check . --extra --no-dev",
     "test": "standard && npm run deps && NODE_ENV=test node test",
