@@ -40,7 +40,7 @@ test('should write a bunch of files', function (t) {
       return path.relative(outDir, filePath)
     }), 'reported as created')
 
-    readdirp({ root: outDir }).pipe(concat({ object: true }, function (arr) {
+    readdirp(outDir).pipe(concat({ object: true }, function (arr) {
       t.ok(Array.isArray(arr), 'is array')
 
       const names = arr.map(function (file) { return file.path })
@@ -61,7 +61,7 @@ test('should inject context variables strings', function (t) {
   copy(inDir, outDir, { foo: 'bar' }, function (err) {
     t.error(err)
 
-    readdirp({ root: outDir }).pipe(concat({ object: true }, function (arr) {
+    readdirp(outDir).pipe(concat({ object: true }, function (arr) {
       t.ok(Array.isArray(arr), 'is array')
 
       const file = path.join(outDir, '1.txt')
@@ -87,7 +87,7 @@ test('should inject context variables strings into filenames', function (t) {
   copy(inDir, outDir, { foo: 'bar' }, function (err) {
     t.error(err)
 
-    readdirp({ root: outDir }).pipe(concat({ object: true }, function (arr) {
+    readdirp(outDir).pipe(concat({ object: true }, function (arr) {
       t.ok(Array.isArray(arr), 'is array')
 
       const file = path.join(outDir, 'bar.txt')
@@ -110,7 +110,7 @@ test('should inject context variables strings into directory names', function (t
   copy(inDir, outDir, { foo: 'bar' }, function (err) {
     t.error(err)
 
-    readdirp({ root: outDir }).pipe(concat({ object: true }, function (arr) {
+    readdirp(outDir).pipe(concat({ object: true }, function (arr) {
       t.ok(Array.isArray(arr), 'is array')
 
       const dir = path.join(outDir, 'bar')

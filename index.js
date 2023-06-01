@@ -5,7 +5,6 @@ const eos = require('end-of-stream')
 const readdirp = require('readdirp')
 const assert = require('assert')
 const mkdirp = require('mkdirp')
-const noop = require('noop2')
 const path = require('path')
 const pump = require('pump')
 const fs = require('graceful-fs')
@@ -16,7 +15,7 @@ module.exports = copyTemplateDir
 // (str, str, obj, fn) -> null
 function copyTemplateDir (srcDir, outDir, vars, cb) {
   if (!cb) {
-    if (!vars) vars = noop
+    if (!vars) vars = function () {}
     cb = vars
     vars = {}
   }
@@ -30,7 +29,7 @@ function copyTemplateDir (srcDir, outDir, vars, cb) {
   mkdirp(outDir, function (err) {
     if (err) return cb(err)
 
-    const rs = readdirp({ root: srcDir })
+    const rs = readdirp(srcDir)
     const streams = []
     const createdFiles = []
 
@@ -57,7 +56,7 @@ function writeFile (outDir, vars, file) {
   return function (done) {
     const fileName = file.path
     const inFile = file.fullPath
-    const parentDir = file.parentDir
+    const parentDir = path.dirname(file.path)
     const outFile = path.join(outDir, maxstache(removeUnderscore(fileName), vars))
 
     mkdirp(path.join(outDir, maxstache(parentDir, vars)), function (err) {
