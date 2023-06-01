@@ -1,0 +1,36 @@
+name: Test
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version:
+          # - 0.12
+          # - 4.x
+          # - 6.x
+          - 8.x # minimum as readdirp 3.x uses object spread
+          - 14.x
+          - 20.x
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install packages
+        run: npm install
+      - name: Test
+        run: npm run test:cov
+      # - name: Upload coverage
+      #   run: |
+      #     npm install -g codecov.io
+      #     cat ./coverage/lcov.info | codecov
