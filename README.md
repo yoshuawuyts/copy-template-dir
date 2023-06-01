@@ -1,6 +1,6 @@
 # copy-template-dir
 [![NPM version][npm-image]][npm-url]
-[![build status][travis-image]][travis-url]
+[![build status][github-actions-image]][github-actions-url]
 [![Test coverage][codecov-image]][codecov-url]
 [![Downloads][downloads-image]][downloads-url]
 [![js-standard-style][standard-image]][standard-url]
@@ -51,8 +51,8 @@ paths to created files if there were no errors.
 
 [npm-image]: https://img.shields.io/npm/v/copy-template-dir.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/copy-template-dir
-[travis-image]: https://img.shields.io/travis/yoshuawuyts/copy-template-dir/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/yoshuawuyts/copy-template-dir
+[github-actions-image]: https://img.shields.io/github/actions/workflow/status/yoshuawuyts/copy-template-dir/test.yml?style=flat-square
+[github-actions-url]: https://github.com/yoshuawuyts/copy-template-dir/actions
 [codecov-image]: https://img.shields.io/codecov/c/github/yoshuawuyts/copy-template-dir/master.svg?style=flat-square
 [codecov-url]: https://codecov.io/github/yoshuawuyts/copy-template-dir
 [downloads-image]: http://img.shields.io/npm/dm/copy-template-dir.svg?style=flat-square
