@@ -5,7 +5,6 @@ const eos = require('end-of-stream')
 const readdirp = require('readdirp')
 const assert = require('assert')
 const mkdirp = require('mkdirp')
-const noop = require('noop2')
 const path = require('path')
 const pump = require('pump')
 const fs = require('graceful-fs')
@@ -16,7 +15,7 @@ module.exports = copyTemplateDir
 // (str, str, obj, fn) -> null
 function copyTemplateDir (srcDir, outDir, vars, cb) {
   if (!cb) {
-    if (!vars) vars = noop
+    if (!vars) vars = function () {}
     cb = vars
     vars = {}
   }
